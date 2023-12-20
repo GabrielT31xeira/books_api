@@ -21,7 +21,7 @@ class BookController extends AbstractController
         if (!$bookRepository->findAll()) {
             // if not found
             return $this->json([
-                'message' => 'Books not foud'
+                'message' => 'Books not found'
             ], 404);
         } else {
             //if find
@@ -39,7 +39,7 @@ class BookController extends AbstractController
         if (!$bookRepository->find($book)) {
             // if not found
             return $this->json([
-                'message' => 'Book not foud'
+                'message' => 'Book not found'
             ], 404);
         } else {
             //if find
@@ -56,7 +56,7 @@ class BookController extends AbstractController
         if (!$bookRepository->find($book)) {
             // if not found
             return $this->json([
-                'message' => 'Book not foud'
+                'message' => 'Book not found'
             ], 404);
         } else {
             //if find
@@ -101,5 +101,24 @@ class BookController extends AbstractController
             'message' => 'Book created successfully!',
             'book' => $book
         ], 201);
+    }
+
+    #[Route('/book/{book}', name: 'book_delete', methods: ['DELETE'])]
+    public function delete(int $book, BookRepository $bookRepository): JsonResponse
+    {
+        // Verify if the book exists
+        $book = $bookRepository->find($book);
+        if (!$book) {
+            // if not found
+            return $this->json([
+                'message' => 'Book not found'
+            ], 404);
+        } else {
+            //if find
+            $bookRepository->remove($book, true);
+            return $this->json([
+                'message' => 'Book removed'
+            ], 200);
+        }
     }
 }
