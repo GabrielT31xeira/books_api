@@ -1,7 +1,32 @@
 version: '3'
 
 services:
-###> doctrine/doctrine-bundle ###
+  nginx:
+    image: nginx:latest
+
+
+    ports:
+      - "80:80"
+    volumes:
+      - "./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro"
+      - "./:/var/www/html"
+    depends_on:
+      - php
+    networks:
+      - books_api
+
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile-php
+    volumes:
+      - "./:/var/www/html"
+    depends_on:
+      - database
+    networks:
+      - books_api
+
+  ###> doctrine/doctrine-bundle ###
   database:
     image: postgres:${POSTGRES_VERSION:-15}-alpine
     environment:
@@ -11,6 +36,8 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-app}
     volumes:
       - database_data:/var/lib/postgresql/data:rw
+    networks:
+      - books_api
       # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
       # - ./docker/db/data:/var/lib/postgresql/data:rw
 ###< doctrine/doctrine-bundle ###
@@ -19,3 +46,6 @@ volumes:
 ###> doctrine/doctrine-bundle ###
   database_data:
 ###< doctrine/doctrine-bundle ###
+
+networks:
+  books_api:

@@ -1,0 +1,26 @@
+FROM php:8.1-fpm
+
+RUN apt-get update && apt-get install -y \
+    git \
+    libzip-dev \
+    unzip \
+    libpq-dev \
+    libpng-dev \
+    libmagickwand-dev \
+    && docker-php-ext-install pdo pdo_pgsql zip \
+    && docker-php-ext-install gd \
+    && docker-php-ext-enable gd
+
+
+# work folder
+WORKDIR /var/www/html
+
+# Copy the project
+COPY . .
+
+# Install composer
+RUN curl -sS https://getcomposer.org/installer | /usr/local/bin/php -- --install-dir=/usr/local/bin --filename=composer
+RUN /usr/local/bin/composer install
+
+EXPOSE 9000
+
