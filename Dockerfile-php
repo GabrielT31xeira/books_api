@@ -12,6 +12,10 @@ RUN adduser --system --home /bin/sh --no-create-home --uid ${UID} --ingroup gabr
 RUN sed -i 's/user = www-data/user = gabrielteixeira/g' /usr/local/etc/php-fpm.d/www.conf
 RUN sed -i 's/group = www-data/group = gabrielteixeira/g' /usr/local/etc/php-fpm.d/www.conf
 
+COPY . /var/www/html
+
+RUN chown -R ${UID}:${GID} /var/www/html
+
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 
 RUN apt-get update && apt-get install -y \
@@ -31,6 +35,7 @@ RUN chmod +x /usr/local/bin/install-php-extensions && \
 # Install and run compose
 RUN curl -sS https://getcomposer.org/installer | /usr/local/bin/php -- --install-dir=/usr/local/bin --filename=composer
 
+RUN composer install --no-interaction --optimize-autoloader
 
 EXPOSE 9000
 

@@ -9,3 +9,7 @@ ENV GID=${GID}
 RUN addgroup --system --gid ${GID} gabrielteixeira
 RUN adduser --system --home /bin/sh --no-create-home --uid ${UID} --ingroup gabrielteixeira --disabled-login --disabled-password gabrielteixeira
 RUN sed -i 's/user  nginx/user gabrielteixeira/g' /etc/nginx/nginx.conf
+
+COPY . /var/www/html
+
+RUN chown -R ${UID}:${GID} /var/www/html
