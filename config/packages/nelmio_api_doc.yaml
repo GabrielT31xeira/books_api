@@ -1,0 +1,39 @@
+nelmio_api_doc:
+    documentation:
+        info:
+            title: My App
+            description: This is an awesome app!
+            version: 1.0.0
+        paths:
+            /api/books:
+                get:
+                    tags:
+                        - Books
+                    summary: Retrieves a list of all books
+                    description: Returns an array of book objects, or an error message if no books are found.
+                    responses:
+                        200:
+                            description: Success
+                            content:
+                                application/json:
+                                    schema:
+                                        type: array
+                                        items:
+                                            type: object
+                                            properties:
+                                                id:
+                                                    type: integer
+                                                    description: The book's ID
+                                                title:
+                                                    type: string
+                                                    description: The book's title
+                                                isbn:
+                                                    type: string
+                                                    description: The book's isbn
+                        404:
+                            description: Books not found
+    areas: # to filter documented areas
+        path_patterns:
+            - ^/api(?!/doc$) # Accepts routes under /api except /api/doc
+        host_patterns: # document only routes with a host of the form api.*
+            - ^api\.

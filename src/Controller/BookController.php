@@ -9,10 +9,48 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\BookRepository;
 use Doctrine\Persistence\ManagerRegistry;
-
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
+use OpenApi\Annotations as OA;
 
 class BookController extends AbstractController
 {
+    /**
+     * @OA\Get(
+     *     path="/api/books",
+     *     tags={"Books"},
+     *     summary="Retrieves a list of all books",
+     *     description="Returns an array of book objects, or an error message if no books are found.",
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *         @OA\JsonContent(
+     *             type="array",
+     *             items={
+     *                 @OA\Property(
+     *                     property="id",
+     *                     type="integer",
+     *                     description="The book's ID"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="title",
+     *                     type="string",
+     *                     description="The book's title"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="isbn",
+     *                     type="string",
+     *                     description="The book's isbn"
+     *                 )
+     *             }
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Books not found"
+     *     )
+     * )
+     */
     #[Route('/books', name: 'book_list', methods: ['GET'])]
     public function index(BookRepository $bookRepository): JsonResponse
     {
