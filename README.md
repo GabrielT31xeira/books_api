@@ -24,4 +24,4 @@ This repo is for the purpose of studying the Symfony Framework, For now it's a s
 ### Installation
 
  - Run: ````docker compose up --build````
- - In PHP container run ````docker exec -it <id-php-container> /bin/bash```` enter in project path ````cd /var/www/html```` and run ````php bin/console doctrine:migrations:migrate```` to create the database.
+ - Acess the doc routes http://localhost/api/doc
