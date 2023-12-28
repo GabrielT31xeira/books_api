@@ -29,7 +29,7 @@ services:
     container_name: php
     volumes:
       - "./:/var/www/html"
-    command: bash -c "composer install && php-fpm"
+    command: bash -c "composer install && php bin/console doctrine:migrations:migrate && php-fpm"
     environment:
       - "DATABASE_URL=postgresql://app:!ChangeMe!@database:5432/app?serverVersion=15&charset=utf8"
       - "APP_ENV=dev"
