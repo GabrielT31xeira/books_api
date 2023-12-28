@@ -1,14 +1,14 @@
 nelmio_api_doc:
     documentation:
         info:
-            title: My App
+            title: Books API Rest
             description: This is an awesome app!
             version: 1.0.0
         paths:
             /api/books:
                 get:
                     tags:
-                        - Books
+                        - List all books
                     summary: Retrieves a list of all books
                     description: Returns an array of book objects, or an error message if no books are found.
                     responses:
@@ -32,6 +32,195 @@ nelmio_api_doc:
                                                     description: The book's isbn
                         404:
                             description: Books not found
+            /api/book/{book}:
+                get:
+                    tags:
+                        - Get one book
+                    summary: Get a single book by ID
+                    parameters:
+                        - name: book
+                          in: path
+                          description: ID of the book to retrieve
+                          required: true
+                          schema:
+                              type: integer
+                    responses:
+                        '200':
+                            description: Successful operation
+                            content:
+                                application/json:
+                                    schema:
+                                        type: object
+                                        properties:
+                                            data:
+                                                type: object
+                                                properties:
+                                                    id:
+                                                        type: integer
+                                                    title:
+                                                        type: string
+                                                    isbn:
+                                                        type: string
+                                                    createdAt:
+                                                        type: string
+                                                        format: date-time
+                                                    updatedAt:
+                                                        type: string
+                                                        format: date-time
+                        '404':
+                            description: Book not found
+                            content:
+                                application/json:
+                                    schema:
+                                        type: object
+                                        properties:
+                                            message:
+                                                type: string
+            /api/book:
+                post:
+                    summary: Create a new book
+                    description: Creates a new book entry in the database
+                    tags:
+                        - Create a new book
+                    requestBody:
+                        required: true
+                        content:
+                            application/json:
+                                schema:
+                                    type: object
+                                    properties:
+                                        title:
+                                            type: string
+                                            description: The title of the book
+                                        isbn:
+                                            type: string
+                                            description: The ISBN of the book
+                                    required:
+                                        - title
+                                        - isbn
+                    responses:
+                        '201':
+                            description: Book created successfully
+                            content:
+                                application/json:
+                                    schema:
+                                        type: object
+                                        properties:
+                                            message:
+                                                type: string
+                                            book:
+                                                type: object
+                                                properties:
+                                                    id:
+                                                        type: integer
+                                                        description: The ID of the newly created book
+                                                    title:
+                                                        type: string
+                                                        description: The title of the book
+                                                    isbn:
+                                                        type: string
+                                                        description: The ISBN of the book
+                                                    createdAt:
+                                                        type: string
+                                                        format: date-time
+                                                        description: The date and time the book was created
+                                                    updatedAt:
+                                                        type: string
+                                                        format: date-time
+                                                        description: The date and time the book was last updated
+            /api/book/{book}/update:
+                put:
+                    summary: Update a book by ID
+                    description: Updates an existing book's details
+                    tags:
+                        - Update a book
+                    parameters:
+                        - name: book
+                          in: path
+                          description: ID of the book to update
+                          required: true
+                          schema:
+                              type: integer
+                    requestBody:
+                        required: true
+                        content:
+                            application/json:
+                                schema:
+                                    type: object
+                                    properties:
+                                        title:
+                                            type: string
+                                            description: The updated title of the book
+                                        isbn:
+                                            type: string
+                                            description: The updated ISBN of the book
+                    responses:
+                        '200':
+                            description: Book updated successfully
+                            content:
+                                application/json:
+                                    schema:
+                                        type: object
+                                        properties:
+                                            message:
+                                                type: string
+                                            book:
+                                                type: object
+                                                properties:
+                                                    id:
+                                                        type: integer
+                                                        description: The ID of the updated book
+                                                    title:
+                                                        type: string
+                                                        description: The updated title of the book
+                                                    isbn:
+                                                        type: string
+                                                        description: The updated ISBN of the book
+                                                    updatedAt:
+                                                        type: string
+                                                        format: date-time
+                                                        description: The date and time the book was last updated
+                        '404':
+                            description: Book not found
+                            content:
+                                application/json:
+                                    schema:
+                                        type: object
+                                        properties:
+                                            message:
+                                                type: string
+            /api/book/{book}/delete:
+                delete:
+                    summary: Delete a book by ID
+                    description: Deletes an existing book
+                    tags:
+                        - Books
+                    parameters:
+                        - name: book
+                          in: path
+                          description: ID of the book to delete
+                          required: true
+                          schema:
+                              type: integer
+                    responses:
+                        '200':
+                            description: Book deleted successfully
+                            content:
+                                application/json:
+                                    schema:
+                                        type: object
+                                        properties:
+                                            message:
+                                                type: string
+                        '404':
+                            description: Book not found
+                            content:
+                                application/json:
+                                    schema:
+                                        type: object
+                                        properties:
+                                            message:
+                                                type: string
     areas: # to filter documented areas
         path_patterns:
             - ^/api(?!/doc$) # Accepts routes under /api except /api/doc
