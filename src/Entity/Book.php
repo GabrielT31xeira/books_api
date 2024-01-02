@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\BookRepository;
 use Doctrine\ORM\Mapping as ORM;
+use phpDocumentor\Reflection\DocBlock\Tags\Author;
 
 #[ORM\Entity(repositoryClass: BookRepository::class)]
 #[ORM\Table(name: 'books')]
@@ -77,5 +78,10 @@ class Book
         $this->updated_at = $updated_at;
 
         return $this;
+    }
+
+    public function author() : User
+    {
+        return $this->belongsTo(Author::class);
     }
 }
