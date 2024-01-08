@@ -27,6 +27,9 @@ class Book
     #[ORM\Column]
     private ?\DateTimeImmutable $updated_at = null;
 
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'books')]
+    private User $user;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -80,8 +83,17 @@ class Book
         return $this;
     }
 
-    public function author() : User
+    public function getUser(): ?User
     {
-        return $this->belongsTo(Author::class);
+        return $this->user;
     }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+        return $this;
+    }
+
+
+
 }

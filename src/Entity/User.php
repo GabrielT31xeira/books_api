@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -29,6 +30,14 @@ class User
 
     #[ORM\Column(length: 1)]
     private ?bool $is_autor = null;
+
+    #[ORM\OneToMany(targetEntity: Book::class, mappedBy: 'user')]
+    private Collection $user;
+
+    public function __construct()
+    {
+        $this->user = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -79,19 +88,11 @@ class User
         return $this;
     }
 
-    public function getIsAutor(): ?bool
+    /**
+     * @return Collection
+     */
+    public function getUser(): Collection
     {
-        return $this->is_autor;
-    }
-
-    public function setIsAutor(?bool $is_autor): static
-    {
-        $this->is_autor = $is_autor;
-        return $this;
-    }
-
-    public function books() : Collection
-    {
-        return $this->hasMany(Book::class);
+        return $this->user;
     }
 }
