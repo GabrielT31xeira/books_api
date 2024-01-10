@@ -21,6 +21,39 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
+    public function findEmail($email)
+    {
+        $entityManager = $this->getEntityManager();
+
+        $query = $entityManager->createQuery(
+            'SELECT e 
+                    FROM App\Entity\User e 
+                    WHERE e.email = :email'
+            )->setParameter('email', $email)->setMaxResults(1);
+
+        return $query->getOneOrNullResult();
+    }
+
+    // Add new books
+    public function add(User $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->persist($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    // Remove books
+    public function remove(User $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->remove($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
 //    /**
 //     * @return User[] Returns an array of User objects
 //     */
